@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://json.schemastore.org/taskfile.json
+---
+version: "3"
+
+vars:
+  STATE: preview-123
+
+env:
+  TF_CLOUD_ORGANIZATION: adamatti
+  # TF_WORKSPACE: staging
+  STATE: "{{.STATE}}"
+  TF_IN_AUTOMATION: true
+
+tasks:
+  default:
+    desc: Show help
+    aliases: [h]
+    silent: true
+    cmds:
+      - task -l
+
+  init:
+    desc: init
+    aliases: [i]
+    env:
+      TF_WORKSPACE: staging
+    cmds:
+      - terraform init
+  
+  apply:
+    desc: apply
+    aliases: [a]
+    env:
+      TF_WORKSPACE: "{{.STATE}}"
+    cmds:
+      - terraform apply -var=stage=${STATE}
+
+  workspace:new:
+    desc: new workspace
+    aliases: [wn]
+    cmds:
+      - terraform workspace new ${STATE}
+
+  workspace:list:
+    desc: list workspace
+    aliases: [wl]
+    cmds:
+      - terraform workspace list
